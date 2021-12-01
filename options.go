@@ -12,8 +12,11 @@ const (
 	ipIntSize = 16
 )
 
+// Option that can change the behaviour of the New() function.
 type Option func(*MAC) error
 
+// AsLocal is an Option for New() that sets the generated MAC address to be a
+// Locally Administered address.
 func AsLocal() Option {
 	return func(mac *MAC) error {
 		mac.SetLocal()
@@ -22,6 +25,8 @@ func AsLocal() Option {
 	}
 }
 
+// AsGlobal is an Option for New() that sets the generated MAC address to be a
+// Globally Unique address.
 func AsGlobal() Option {
 	return func(mac *MAC) error {
 		mac.SetGlobal()
@@ -30,6 +35,8 @@ func AsGlobal() Option {
 	}
 }
 
+// AsUnicast is an Option for New() that sets the generated MAC address to be a
+// Unicast address.
 func AsUnicast() Option {
 	return func(mac *MAC) error {
 		mac.SetUnicast()
@@ -38,6 +45,8 @@ func AsUnicast() Option {
 	}
 }
 
+// AsMulticast is an Option for New() that sets the generated MAC address to be a
+// Multicast address.
 func AsMulticast() Option {
 	return func(mac *MAC) error {
 		mac.SetMulticast()
@@ -46,6 +55,8 @@ func AsMulticast() Option {
 	}
 }
 
+// WithOUI is an Option for New() that sets the generated MAC address with fixed
+// OUI.
 func WithOUI(oui string) Option {
 	parts := strings.Split(oui, ":")
 
@@ -69,6 +80,8 @@ func WithOUI(oui string) Option {
 	}
 }
 
+// WithNIC is an Option for New() that sets the generated MAC address with fixed
+// NIC.
 func WithNIC(nic string) Option {
 	parts := strings.Split(nic, ":")
 
@@ -92,6 +105,9 @@ func WithNIC(nic string) Option {
 	}
 }
 
+// WithNICFromIPv4 is an Option for New() that sets the generated MAC address with fixed
+// NIC based on the provided IPv4 address. It uses the last 3 bytes of the
+// address.
 func WithNICFromIPv4(ip string) Option {
 	parts := strings.Split(ip, ".")
 

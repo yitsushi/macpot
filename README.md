@@ -1,5 +1,8 @@
 # MAC Address Generator
 
+[![codecov](https://codecov.io/gh/yitsushi/macpot/branch/main/graph/badge.svg?token=TZC7E8RA6B)](https://codecov.io/gh/yitsushi/macpot)
+[![Quality Check](https://github.com/yitsushi/macpot/actions/workflows/quality-check.yaml/badge.svg)](https://github.com/yitsushi/macpot/actions/workflows/quality-check.yaml)
+
 MacPot is an easy to use MAC address generator.
 
 ```go

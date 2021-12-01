@@ -31,10 +31,12 @@ const (
 //   OUI: host machine specific
 //   NIC: the last 3 bytes of the IP address
 
+// MAC address.
 type MAC struct {
 	bytes []byte
 }
 
+// New creates a new MAC address with Options.
 func New(options ...Option) (MAC, error) {
 	mac := MAC{bytes: make([]byte, macByteLength)}
 
@@ -52,6 +54,7 @@ func New(options ...Option) (MAC, error) {
 	return mac, nil
 }
 
+// NewFromBytes creates a new MAC address from bytes.
 func NewFromBytes(value []byte) MAC {
 	bytes := make([]byte, macByteLength)
 
@@ -60,6 +63,7 @@ func NewFromBytes(value []byte) MAC {
 	return MAC{bytes: bytes}
 }
 
+// NewFromUint64 creates a new MAC address from Uint64.
 func NewFromUint64(value uint64) MAC {
 	bytes := make([]byte, intValueByteSize)
 
@@ -68,6 +72,7 @@ func NewFromUint64(value uint64) MAC {
 	return MAC{bytes: bytes[(intValueByteSize - macByteLength):]}
 }
 
+// ToString returns the well known string representation of the MAC address.
 func (mac MAC) ToString() string {
 	output := []string{}
 
@@ -78,6 +83,7 @@ func (mac MAC) ToString() string {
 	return strings.Join(output, ":")
 }
 
+// FillRandom popupates the MAC address with random values.
 func (mac *MAC) FillRandom() error {
 	if _, err := rand.Read(mac.bytes); err != nil {
 		return fmt.Errorf("unable to generate random data: %w", err)
@@ -86,10 +92,12 @@ func (mac *MAC) FillRandom() error {
 	return nil
 }
 
+// Bytes of the MAC address.
 func (mac MAC) Bytes() []byte {
 	return mac.bytes
 }
 
+// ToUint64 returns with the Uint64 representation of the MAC address.
 func (mac MAC) ToUint64() uint64 {
 	bytes := make([]byte, intValueByteSize)
 
@@ -98,6 +106,7 @@ func (mac MAC) ToUint64() uint64 {
 	return binary.BigEndian.Uint64(bytes)
 }
 
+// Next generates the next MAC address.
 func (mac MAC) Next() MAC {
 	bytes := make([]byte, intValueByteSize)
 
@@ -108,38 +117,47 @@ func (mac MAC) Next() MAC {
 	return NewFromUint64(intValue + 1)
 }
 
+// SetLocal forces the MAC address to be a Locally Administered address.
 func (mac *MAC) SetLocal() {
 	mac.bytes[0] |= secondBitOn
 }
 
+// SetGlobal forces the MAC address to be a Globally Unique address.
 func (mac *MAC) SetGlobal() {
 	mac.bytes[0] &= secondBitOff
 }
 
+// SetMulticast forces the MAC address to be a Multicast address.
 func (mac *MAC) SetMulticast() {
 	mac.bytes[0] |= firstBitOn
 }
 
+// SetUnicast forces the MAC address to be a Unicast address.
 func (mac *MAC) SetUnicast() {
 	mac.bytes[0] &= firstBitOff
 }
 
+// IsLocal checks if the address is a Locally Administered address.
 func (mac MAC) IsLocal() bool {
 	return mac.bytes[0]&secondBitOn == secondBitOn
 }
 
+// IsGlobal checks if the address is a Globally Unique address.
 func (mac MAC) IsGlobal() bool {
 	return !mac.IsLocal()
 }
 
+// IsMulticast checks if the address is a Multicast address.
 func (mac MAC) IsMulticast() bool {
 	return mac.bytes[0]&firstBitOn == firstBitOn
 }
 
+// IsUnicast checks if the address is a Unicast address.
 func (mac MAC) IsUnicast() bool {
 	return !mac.IsMulticast()
 }
 
+// SetOctet sets a specific octet in the MAC address.
 func (mac *MAC) SetOctet(index int, value byte) error {
 	if index < 0 || index > macByteLength {
 		return OutOfBoundError{TargetIndex: index}
