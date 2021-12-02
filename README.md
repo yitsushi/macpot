@@ -1,6 +1,6 @@
 # MAC Address Generator
 
-[![codecov](https://codecov.io/gh/yitsushi/macpot/branch/main/graph/badge.svg?token=TZC7E8RA6B)](https://codecov.io/gh/yitsushi/macpot)
+[![Coverage Status](https://coveralls.io/repos/github/yitsushi/macpot/badge.svg)](https://coveralls.io/github/yitsushi/macpot)
 [![Quality Check](https://github.com/yitsushi/macpot/actions/workflows/quality-check.yaml/badge.svg)](https://github.com/yitsushi/macpot/actions/workflows/quality-check.yaml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/yitsushi/macpot)](https://goreportcard.com/report/github.com/yitsushi/macpot)
 
