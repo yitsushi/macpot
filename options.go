@@ -1,7 +1,6 @@
 package macpot
 
 import (
-	"encoding/hex"
 	"fmt"
 	"strconv"
 	"strings"
@@ -9,6 +8,7 @@ import (
 
 const (
 	base10    = 10
+	base16    = 16
 	ipIntSize = 16
 )
 
@@ -66,12 +66,12 @@ func WithFullAddress(address string) Option {
 		}
 
 		for idx := 0; idx < macByteLength; idx++ {
-			value, err := hex.DecodeString(parts[idx])
+			value, err := strconv.ParseInt(parts[idx], base16, ipIntSize)
 			if err != nil {
 				return AddressError{Message: err.Error()}
 			}
 
-			if err := mac.SetOctet(idx, value[0]); err != nil {
+			if err := mac.SetOctet(idx, byte(value)); err != nil {
 				return err
 			}
 		}
@@ -91,12 +91,12 @@ func WithOUI(oui string) Option {
 		}
 
 		for idx := 0; idx < ouiByteLength; idx++ {
-			value, err := hex.DecodeString(parts[idx])
+			value, err := strconv.ParseInt(parts[idx], base16, ipIntSize)
 			if err != nil {
 				return OUIError{Message: err.Error()}
 			}
 
-			if err := mac.SetOctet(idx, value[0]); err != nil {
+			if err := mac.SetOctet(idx, byte(value)); err != nil {
 				return err
 			}
 		}
@@ -116,12 +116,12 @@ func WithNIC(nic string) Option {
 		}
 
 		for idx := 0; idx < nicByteLength; idx++ {
-			value, err := hex.DecodeString(parts[idx])
+			value, err := strconv.ParseInt(parts[idx], base16, ipIntSize)
 			if err != nil {
 				return NICError{Message: err.Error()}
 			}
 
-			if err := mac.SetOctet(ouiByteLength+idx, value[0]); err != nil {
+			if err := mac.SetOctet(ouiByteLength+idx, byte(value)); err != nil {
 				return err
 			}
 		}

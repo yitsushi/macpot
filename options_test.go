@@ -44,7 +44,7 @@ func TestNew_WithFullAddress_invalidCharacter(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.ErrorAs(t, err, &macpot.AddressError{})
-	assert.Equal(t, "encoding/hex: invalid byte: U+006C 'l'", err.Error())
+	assert.Equal(t, "strconv.ParseInt: parsing \"2l\": invalid syntax", err.Error())
 }
 
 func TestNew_WithOUI(t *testing.T) {
@@ -87,7 +87,7 @@ func TestNew_WithOUI_invalidCharacter(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.ErrorAs(t, err, &macpot.OUIError{})
-	assert.Equal(t, "encoding/hex: invalid byte: U+006C 'l'", err.Error())
+	assert.Equal(t, "strconv.ParseInt: parsing \"2l\": invalid syntax", err.Error())
 }
 
 func TestNew_WithNIC(t *testing.T) {
@@ -130,7 +130,7 @@ func TestNew_WithNIC_invalidCharacter(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.ErrorAs(t, err, &macpot.NICError{})
-	assert.Equal(t, "encoding/hex: invalid byte: U+006C 'l'", err.Error())
+	assert.Equal(t, "strconv.ParseInt: parsing \"2l\": invalid syntax", err.Error())
 }
 
 func TestNew_WithNICFromIPv4(t *testing.T) {
