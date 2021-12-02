@@ -12,7 +12,7 @@ package macpot
 import (
 	"fmt"
 
-  "github.com/yitsushi/macpot"
+ 	"github.com/yitsushi/macpot"
 )
 
 func info(mac *MAC) {
