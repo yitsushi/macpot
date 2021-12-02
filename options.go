@@ -55,6 +55,31 @@ func AsMulticast() Option {
 	}
 }
 
+// WithFullAddress is an Option for New() to set the full MAC address.
+// Good for validation.
+func WithFullAddress(address string) Option {
+	parts := strings.Split(address, ":")
+
+	return func(mac *MAC) error {
+		if len(parts) != macByteLength {
+			return AddressError{Message: fmt.Sprintf("invalid MAC address length: %s", address)}
+		}
+
+		for idx := 0; idx < macByteLength; idx++ {
+			value, err := hex.DecodeString(parts[idx])
+			if err != nil {
+				return AddressError{Message: err.Error()}
+			}
+
+			if err := mac.SetOctet(idx, value[0]); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	}
+}
+
 // WithOUI is an Option for New() that sets the generated MAC address with fixed
 // OUI.
 func WithOUI(oui string) Option {
@@ -114,13 +139,13 @@ func WithNICFromIPv4(ip string) Option {
 	return func(mac *MAC) error {
 		// We will skip the first part.
 		if len(parts) != nicByteLength+1 {
-			return NICError{Message: fmt.Sprintf("invalid NIC: %s", ip)}
+			return IPv4Error{Message: fmt.Sprintf("invalid IPv4 address: %s", ip)}
 		}
 
 		for idx := 0; idx < nicByteLength; idx++ {
 			value, err := strconv.ParseInt(parts[idx+1], base10, ipIntSize)
 			if err != nil {
-				return NICError{Message: err.Error()}
+				return IPv4Error{Message: err.Error()}
 			}
 
 			if err := mac.SetOctet(ouiByteLength+idx, byte(value)); err != nil {

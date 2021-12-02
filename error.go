@@ -28,3 +28,21 @@ type NICError struct {
 func (e NICError) Error() string {
 	return e.Message
 }
+
+// IPv4Error occurs when something goes wrong parsing the provided IPv4.
+type IPv4Error struct {
+	Message string
+}
+
+func (e IPv4Error) Error() string {
+	return e.Message
+}
+
+// AddressError occurs when something goes wrong parsing the provided Address.
+type AddressError struct {
+	Message string
+}
+
+func (e AddressError) Error() string {
+	return e.Message
+}

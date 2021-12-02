@@ -148,6 +148,7 @@ func TestMac_SetOctet_negativeIndex(t *testing.T) {
 	assert.Error(t, err)
 	assert.ErrorAs(t, err, &macpot.OutOfBoundError{})
 	assert.Equal(t, "11:22:33:44:55:66", mac.ToString())
+	assert.Equal(t, "unable to set octet -3", err.Error())
 }
 
 func TestMac_SetOctet_largeIndex(t *testing.T) {
@@ -157,4 +158,5 @@ func TestMac_SetOctet_largeIndex(t *testing.T) {
 	assert.Error(t, err)
 	assert.ErrorAs(t, err, &macpot.OutOfBoundError{})
 	assert.Equal(t, "11:22:33:44:55:66", mac.ToString())
+	assert.Equal(t, "unable to set octet 55", err.Error())
 }
