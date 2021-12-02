@@ -7,17 +7,6 @@ import (
 	"strings"
 )
 
-const (
-	macByteLength    = 6
-	intValueByteSize = 8
-	ouiByteLength    = 3
-	nicByteLength    = 3
-	firstBitOn       = 0x01
-	firstBitOff      = 0xfe
-	secondBitOn      = 0x02
-	secondBitOff     = 0xfd
-)
-
 // first 3 octets are the OUI (Organisationally Unique Identifier)
 // last 3 octets are the NIC (Network interface controler specific)
 //

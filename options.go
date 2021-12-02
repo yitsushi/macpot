@@ -1,17 +1,5 @@
 package macpot
 
-import (
-	"fmt"
-	"strconv"
-	"strings"
-)
-
-const (
-	base10    = 10
-	base16    = 16
-	ipIntSize = 16
-)
-
 // Option that can change the behaviour of the New() function.
 type Option func(*MAC) error
 
@@ -50,108 +38,6 @@ func AsUnicast() Option {
 func AsMulticast() Option {
 	return func(mac *MAC) error {
 		mac.SetMulticast()
-
-		return nil
-	}
-}
-
-// WithFullAddress is an Option for New() to set the full MAC address.
-// Good for validation.
-func WithFullAddress(address string) Option {
-	parts := strings.Split(address, ":")
-
-	return func(mac *MAC) error {
-		if len(parts) != macByteLength {
-			return AddressError{Message: fmt.Sprintf("invalid MAC address length: %s", address)}
-		}
-
-		for idx := 0; idx < macByteLength; idx++ {
-			value, err := strconv.ParseInt(parts[idx], base16, ipIntSize)
-			if err != nil {
-				return AddressError{Message: err.Error()}
-			}
-
-			if err := mac.SetOctet(idx, byte(value)); err != nil {
-				return err
-			}
-		}
-
-		return nil
-	}
-}
-
-// WithOUI is an Option for New() that sets the generated MAC address with fixed
-// OUI.
-func WithOUI(oui string) Option {
-	parts := strings.Split(oui, ":")
-
-	return func(mac *MAC) error {
-		if len(parts) != ouiByteLength {
-			return OUIError{Message: fmt.Sprintf("invalid OUI: %s", oui)}
-		}
-
-		for idx := 0; idx < ouiByteLength; idx++ {
-			value, err := strconv.ParseInt(parts[idx], base16, ipIntSize)
-			if err != nil {
-				return OUIError{Message: err.Error()}
-			}
-
-			if err := mac.SetOctet(idx, byte(value)); err != nil {
-				return err
-			}
-		}
-
-		return nil
-	}
-}
-
-// WithNIC is an Option for New() that sets the generated MAC address with fixed
-// NIC.
-func WithNIC(nic string) Option {
-	parts := strings.Split(nic, ":")
-
-	return func(mac *MAC) error {
-		if len(parts) != nicByteLength {
-			return NICError{Message: fmt.Sprintf("invalid NIC: %s", nic)}
-		}
-
-		for idx := 0; idx < nicByteLength; idx++ {
-			value, err := strconv.ParseInt(parts[idx], base16, ipIntSize)
-			if err != nil {
-				return NICError{Message: err.Error()}
-			}
-
-			if err := mac.SetOctet(ouiByteLength+idx, byte(value)); err != nil {
-				return err
-			}
-		}
-
-		return nil
-	}
-}
-
-// WithNICFromIPv4 is an Option for New() that sets the generated MAC address with fixed
-// NIC based on the provided IPv4 address. It uses the last 3 bytes of the
-// address.
-func WithNICFromIPv4(ip string) Option {
-	parts := strings.Split(ip, ".")
-
-	return func(mac *MAC) error {
-		// We will skip the first part.
-		if len(parts) != nicByteLength+1 {
-			return IPv4Error{Message: fmt.Sprintf("invalid IPv4 address: %s", ip)}
-		}
-
-		for idx := 0; idx < nicByteLength; idx++ {
-			value, err := strconv.ParseInt(parts[idx+1], base10, ipIntSize)
-			if err != nil {
-				return IPv4Error{Message: err.Error()}
-			}
-
-			if err := mac.SetOctet(ouiByteLength+idx, byte(value)); err != nil {
-				return err
-			}
-		}
 
 		return nil
 	}
